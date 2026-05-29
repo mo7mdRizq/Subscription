@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>متابعة الباقة الشهرية</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      color:white;
+      padding:20px;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+      font-size:32px;
+    }
+
+    .top-bar{
+      display:flex;
+      gap:10px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+
+    input{
+      flex:1;
+      min-width:180px;
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      font-size:16px;
+      outline:none;
+    }
+
+    button{
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .add-btn{
+      background:#22c55e;
+      color:white;
+      padding:12px 18px;
+      font-size:15px;
+    }
+
+    .add-btn:hover{
+      background:#16a34a;
+    }
+
+    .delete-btn{
+      background:#ef4444;
+      color:white;
+      padding:8px 12px;
+      font-size:14px;
+    }
+
+    .delete-btn:hover{
+      background:#dc2626;
+    }
+
+    .table-wrapper{
+      overflow:auto;
+      max-height:80vh;
+      background:#1e293b;
+      border-radius:20px;
+    }
+
+    table{
+      border-collapse:collapse;
+      min-width:1450px;
+      width:100%;
+    }
+
+    th,
+    td{
+      padding:10px;
+      text-align:center;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      white-space:nowrap;
+    }
+
+    th{
+      background:#334155;
+      position:sticky;
+      top:0;
+      z-index:5;
+    }
+
+    tr:hover{
+      background:rgba(255,255,255,0.03);
+    }
+
+    .sticky-col{
+      position:sticky;
+      background:#1e293b;
+    }
+
+    thead .sticky-col{
+      background:#334155;
+      z-index:20;
+    }
+
+    .number-col{
+      right:0;
+      min-width:40px;
+      z-index:15;
+    }
+
+    .name-col{
+      right:40px;
+      min-width:160px;
+      z-index:15;
+    }
+
+    .name-cell{
+      font-weight:bold;
+    }
+
+    .paid{
+      width:22px;
+      height:22px;
+      cursor:pointer;
+      accent-color:#22c55e;
+    }
+
+    .date-text{
+      font-size:11px;
+      color:#94a3b8;
+      margin-top:6px;
+      line-height:1.5;
+    }
+
+    .price-box{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+    }
+
+    .price-text{
+      font-weight:bold;
+      color:#22c55e;
+      min-width:60px;
+    }
+
+    .edit-price-btn{
+      background:#3b82f6;
+      color:white;
+      padding:6px 10px;
+      border:none;
+      border-radius:8px;
+      font-size:12px;
+      cursor:pointer;
+    }
+
+    .save-price-btn{
+      background:#22c55e;
+      color:white;
+      padding:6px 10px;
+      border:none;
+      border-radius:8px;
+      font-size:12px;
+      cursor:pointer;
+    }
+
+    .price-input{
+      width:80px;
+      padding:6px;
+      border:none;
+      border-radius:8px;
+      text-align:center;
+      outline:none;
+    }
+
+    .empty{
+      padding:30px;
+      color:#94a3b8;
+      text-align:center;
+    }
+
+    @media (max-width:768px){
+
+      body{
+        padding:10px;
+      }
+
+      h1{
+        font-size:24px;
+      }
+
+      .top-bar{
+        flex-direction:column;
+      }
+
+      input,
+      .add-btn{
+        width:100%;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>
+      متابعة الباقة الشهرية
+    </h1>
+
+    <div class="top-bar">
+
+      <input
+        type="text"
+        id="nameInput"
+        placeholder="اكتب اسم الشخص"
+      />
+
+      <input
+        type="number"
+        id="priceInput"
+        placeholder="سعر الباقة"
+      />
+
+      <button
+        class="add-btn"
+        id="addBtn"
+      >
+        إضافة شخص
+      </button>
+
+    </div>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th class="sticky-col number-col">
+              #
+            </th>
+
+            <th class="sticky-col name-col">
+              الاسم
+            </th>
+
+            <th>يناير</th>
+            <th>فبراير</th>
+            <th>مارس</th>
+            <th>أبريل</th>
+            <th>مايو</th>
+            <th>يونيو</th>
+            <th>يوليو</th>
+            <th>أغسطس</th>
+            <th>سبتمبر</th>
+            <th>أكتوبر</th>
+            <th>نوفمبر</th>
+            <th>ديسمبر</th>
+
+            <th>السعر</th>
+
+            <th>حذف</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="tableBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const months = [
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر'
+    ];
+
+    let people =
+      JSON.parse(
+        localStorage.getItem('subscriptions')
+      ) || [];
+
+    // تحويل البيانات القديمة
+
+    people = people.map(person => {
+
+      if(
+        typeof person.payments[0]
+        === 'boolean'
+      ){
+
+        person.payments =
+          person.payments.map(value => ({
+
+            paid:value,
+            date:''
+
+          }));
+
+      }
+
+      return person;
+
+    });
+
+    function saveData(){
+
+      localStorage.setItem(
+        'subscriptions',
+        JSON.stringify(people)
+      );
+
+    }
+
+    function renderTable(){
+
+      const tableBody =
+        document.getElementById('tableBody');
+
+      tableBody.innerHTML = '';
+
+      if(people.length === 0){
+
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="16" class="empty">
+              لا يوجد أشخاص حتى الآن
+            </td>
+          </tr>
+        `;
+
+        return;
+      }
+
+      people.forEach((person, personIndex)=>{
+
+        const row =
+          document.createElement('tr');
+
+        // رقم
+
+        const numberTd =
+          document.createElement('td');
+
+        numberTd.className =
+          'sticky-col number-col';
+
+        numberTd.textContent =
+          personIndex + 1;
+
+        row.appendChild(numberTd);
+
+        // الاسم
+
+        const nameTd =
+          document.createElement('td');
+
+        nameTd.className =
+          'name-cell sticky-col name-col';
+
+        nameTd.textContent =
+          person.name;
+
+        row.appendChild(nameTd);
+
+        // الشهور
+
+        months.forEach((month, monthIndex)=>{
+
+          const td =
+            document.createElement('td');
+
+          // checkbox
+
+          const checkbox =
+            document.createElement('input');
+
+          checkbox.type = 'checkbox';
+
+          checkbox.className = 'paid';
+
+          checkbox.checked =
+            person.payments[monthIndex].paid;
+
+          checkbox.addEventListener(
+            'change',
+            ()=>{
+
+              togglePayment(
+                personIndex,
+                monthIndex
+              );
+
+            }
+          );
+
+          td.appendChild(checkbox);
+
+          // التاريخ
+
+          const dateDiv =
+            document.createElement('div');
+
+          dateDiv.className =
+            'date-text';
+
+          if(
+            person.payments[monthIndex]
+            .date
+          ){
+
+            dateDiv.textContent =
+              person.payments[monthIndex]
+              .date;
+
+          }
+
+          td.appendChild(dateDiv);
+
+          row.appendChild(td);
+
+        });
+
+        // السعر
+
+        const priceTd =
+          document.createElement('td');
+
+        const priceBox =
+          document.createElement('div');
+
+        priceBox.className =
+          'price-box';
+
+        // السعر الحالي
+
+        const priceText =
+          document.createElement('span');
+
+        priceText.className =
+          'price-text';
+
+        priceText.textContent =
+          person.price + ' ج';
+
+        // زر تعديل
+
+        const editBtn =
+          document.createElement('button');
+
+        editBtn.className =
+          'edit-price-btn';
+
+        editBtn.textContent =
+          'تعديل';
+
+        editBtn.addEventListener(
+          'click',
+          ()=>{
+
+            priceBox.innerHTML = '';
+
+            const input =
+              document.createElement('input');
+
+            input.type = 'number';
+
+            input.value =
+              person.price;
+
+            input.className =
+              'price-input';
+
+            const saveBtn =
+              document.createElement('button');
+
+            saveBtn.className =
+              'save-price-btn';
+
+            saveBtn.textContent =
+              'حفظ';
+
+            saveBtn.addEventListener(
+              'click',
+              ()=>{
+
+                updatePrice(
+                  personIndex,
+                  input.value
+                );
+
+                renderTable();
+
+              }
+            );
+
+            priceBox.appendChild(input);
+
+            priceBox.appendChild(saveBtn);
+
+          }
+        );
+
+        priceBox.appendChild(priceText);
+
+        priceBox.appendChild(editBtn);
+
+        priceTd.appendChild(priceBox);
+
+        row.appendChild(priceTd);
+
+        // حذف
+
+        const deleteTd =
+          document.createElement('td');
+
+        const deleteBtn =
+          document.createElement('button');
+
+        deleteBtn.className =
+          'delete-btn';
+
+        deleteBtn.textContent =
+          'حذف';
+
+        deleteBtn.addEventListener(
+          'click',
+          ()=>{
+
+            deletePerson(personIndex);
+
+          }
+        );
+
+        deleteTd.appendChild(deleteBtn);
+
+        row.appendChild(deleteTd);
+
+        tableBody.appendChild(row);
+
+      });
+
+    }
+
+    function addPerson(){
+
+      const input =
+        document.getElementById('nameInput');
+
+      const priceInput =
+        document.getElementById('priceInput');
+
+      const name =
+        input.value.trim();
+
+      const price =
+        priceInput.value.trim();
+
+      if(!name){
+
+        alert(
+          'من فضلك اكتب اسم الشخص'
+        );
+
+        return;
+      }
+
+      if(!price){
+
+        alert(
+          'من فضلك اكتب سعر الباقة'
+        );
+
+        return;
+      }
+
+      people.push({
+
+        name:name,
+
+        price:price,
+
+        payments:Array(12)
+        .fill()
+        .map(()=>({
+
+          paid:false,
+          date:''
+
+        }))
+
+      });
+
+      saveData();
+
+      renderTable();
+
+      input.value = '';
+
+      priceInput.value = '';
+
+    }
+
+    function togglePayment(
+      personIndex,
+      monthIndex
+    ){
+
+      const current =
+        people[personIndex]
+        .payments[monthIndex];
+
+      current.paid =
+        !current.paid;
+
+      if(current.paid){
+
+        const now =
+          new Date();
+
+        current.date =
+
+          now.toLocaleDateString('ar-EG')
+
+          + ' - ' +
+
+          now.toLocaleTimeString('ar-EG');
+
+      }else{
+
+        current.date = '';
+
+      }
+
+      saveData();
+
+      renderTable();
+
+    }
+
+    function updatePrice(
+      personIndex,
+      newPrice
+    ){
+
+      people[personIndex]
+      .price = newPrice;
+
+      saveData();
+
+    }
+
+    function deletePerson(index){
+
+      const confirmDelete =
+        confirm(
+          'هل أنت متأكد من حذف هذا الشخص؟'
+        );
+
+      if(confirmDelete){
+
+        people.splice(index,1);
+
+        saveData();
+
+        renderTable();
+
+      }
+
+    }
+
+    document
+      .getElementById('addBtn')
+      .addEventListener(
+        'click',
+        addPerson
+      );
+
+    renderTable();
+
+  </script>
+
+</body>
+</html>
